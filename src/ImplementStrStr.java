@@ -22,15 +22,19 @@ public class ImplementStrStr {
     }
     //具体算法
     int hIndex = 0;
-    while((haystack.length() - hIndex) >= needle.length()) {
-      for(int i = 0; i < needle.length(); i++) {
-        if(haystack.charAt(hIndex + i) != needle.charAt(i)) {
-          if(array[i] == 0) {
-            hIndex++;
-            break;
-          } else {
-
-          }
+    int nIndex = 0;
+    for(;;) {
+      if((haystack.length() - hIndex) < (needle.length() - nIndex)) return -1;
+      if(nIndex == needle.length()) return hIndex - nIndex;
+      if(haystack.charAt(hIndex) == needle.charAt(nIndex)) {
+        hIndex++;
+        nIndex++;
+      }
+      else {
+        if(array[nIndex] == 0) {
+          hIndex++;
+        } else {
+          nIndex -= array[nIndex];
         }
       }
     }
