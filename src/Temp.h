@@ -17,26 +17,22 @@ enum protocolType
 
 class Header {
 	public:
+		static const int HEADER_SIZE;
 		uint32_t start;
 		protocolType pro;
 		Header();
-		/*{
-			start = 0x12345678;
-			pro = login;
-		}*/
 		Header(char *buff);
-		/*{
-			start = *((uint32_t)buff);
-			pro = *((protocolType)(buff + sizeof(uint32_t)));
-		}*/
-		void serialize(char *buff);
+		uint32_t serialize(char *buff);
 		Header deserialize(char *buff);
 };
 
+const int Header::HEADER_SIZE = 24;
+
 class Body {
 	public:
-		virtual void serialize(char *buff) = 0;
-		virtual Body serialize(char *buff) = 0;
+		virtual uint32_t serialize(char *buff);
+		//virtual Body serialize(char *buff);
+		//Body();
 };
 
 class Frame {
@@ -45,7 +41,7 @@ class Frame {
 		Body body;
 		Frame();
 		Frame(char *buff);
-		void serialize(char *buff);
+		uint32_t serialize(char *buff);
 		Frame deserialize(char *buff);
 };
 
@@ -55,7 +51,7 @@ class LoginBody : public Body
 		string passwd;
 		LoginBody();
 		LoginBody(char *buff, uint32_t size);
-		void serialize(char *buff);
+		uint32_t serialize(char *buff);
 		LoginBody deserialize(char *buff, uint32_t size);
 };
 
@@ -68,15 +64,15 @@ public:
 			uint8_t param2;
 			ParamItem();
 			ParamItem(char *buff);
-			void serialize(char *buff);
+			uint32_t serialize(char *buff);
 			ParamItem deserialize(char *buff);
 	};
 	vector<ParamItem> params;
 	RunBody();
 	RunBody(char *buff, uint32_t size);
-	void serialize(char *buff);
+	uint32_t serialize(char *buff);
 	RunBody deserialize(char *buff, uint32_t size);
 	~RunBody();
 };
 
-#endif
+#endif //_PROTOCOL_TEST_H_
