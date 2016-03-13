@@ -64,13 +64,13 @@ public final class Route
 
         /**
          * 创建一个哨兵（标杆）
-         * 所有中途的解均与此相比较，不如此解好的均舍弃
+         * 所有中途的解均与此相比较,不如此解好的均舍弃
          */
         Solution bestSolution = route.new Solution();
         bestSolution.sum = Integer.MAX_VALUE;
 
         /**
-         * 如果起始点属于V`，则以其他任何V`中的点作为起点的线路均无意义
+         * 如果起始点属于V`,则以其他任何V`中的点作为起点的线路均无意义
          */
         List<Solution> processSolutionQueue = new LinkedList<>();
         if(v.contains(startPoint)) {
@@ -97,7 +97,7 @@ public final class Route
                     newSolution.pastPoints.add(i);
 
                     /**
-                     * 如果此解为V`中的一个全解（即从V`中某点开始，到V`中某点结束，且经过V`中每一个点）
+                     * 如果此解为V`中的一个全解（即从V`中某点开始,到V`中某点结束,且经过V`中每一个点）
                      */
                     if(newSolution.pastPoints.containsAll(v) && newSolution.sum < bestSolution.sum) {
                         Solution tempSolution = route.new Solution();
@@ -162,7 +162,7 @@ public final class Route
     }
 
     /**
-     * 最短路径算法
+     * 最短路径算法,其中要受到已经过点的限制和全局最优解的限制
      */
     public static Solution shortest(int start, int end, Solution limitedNode, int maxSum) {
         List<Solution> nodeQueue = new LinkedList<>();
@@ -205,16 +205,16 @@ public final class Route
     }
 
     class GraphPoint {
-        public int id;
+        public int id;                      
         public int weight;
     }
 
     class Solution {
-        public List<Integer> path;
-        public int point;
-        public int sum;
-        public int firstPoint;
-        public Set<Integer> pastPoints;
+        public List<Integer> path;          //该解的路径
+        public int point;                   //该解当前结束点
+        public int sum;                     //该解的权重之和
+        public int firstPoint;              //该解的开始点
+        public Set<Integer> pastPoints;     //该解经过的节点（防止回环）
     }
 
 }
