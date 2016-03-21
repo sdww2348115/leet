@@ -67,6 +67,7 @@ public final class Route
          * 所有中途的解均与此相比较,不如此解好的均舍弃
          */
         Solution bestSolution = route.new Solution();
+        List<Integer> resultPath = new LinkedList<>();
         bestSolution.sum = Integer.MAX_VALUE;
 
         /**
@@ -95,10 +96,12 @@ public final class Route
                     if( route.bytesContain(newSolution.pastPoints, v) && newSolution.sum < bestSolution.sum) {
 
                         Solution tempSolution = route.new Solution();
+                        List<Integer> tempPath = new LinkedList<>();
                         Solution vtoEnd = shortest(newSolution.point, endPoint, newSolution, bestSolution.sum);
                         vtoEnd.firstPoint = newSolution.firstPoint;
                         if(vtoEnd.sum < bestSolution.sum) {
-                            route.addTree(newSolution.path, vtoEnd.path);
+                            route.treeToList(vtoEnd.path, tempPath);
+                            route.treeToList(newSolution.path, tempPath);
                             tempSolution = vtoEnd;
                         }
                         /**
@@ -106,9 +109,9 @@ public final class Route
                          */
                         Solution startToV = shortest(startPoint, newSolution.firstPoint, tempSolution, bestSolution.sum);
                         if(startToV.sum < bestSolution.sum) {
-                            route.addTree(startToV.path, tempSolution.path);
                             bestSolution = startToV;
-                            bestSolution.path = tempSolution.path;
+                            route.treeToList(startToV.path, tempPath);
+                            resultPath = tempPath;
                         }
                     } else {
                         processSolutionQueue.add(newSolution);
@@ -119,9 +122,8 @@ public final class Route
         }
 
         if(bestSolution.sum == Integer.MAX_VALUE) return new String("NA");
-        List<Integer> path = route.treeToList(bestSolution.path);
         StringBuffer sb = new StringBuffer();
-        for(Integer i:path) {
+        for(Integer i:resultPath) {
             sb.append(String.valueOf(i)).append("|");
         }
         sb.deleteCharAt(sb.length() - 1);
@@ -226,22 +228,10 @@ public final class Route
     }
 
     /**
-     * 将subTree挂到rootTree的后面
-     */
-    final void addTree(TreeNode rootTree, TreeNode subTree) {
-        TreeNode next = subTree;
-        while(next.parent.id != -1) {
-            next = next.parent;
-        }
-        next.parent = rootTree;
-    }
-
-    /**
      * 将biTree转换为List<Integer>
      */
-    final List<Integer> treeToList(TreeNode node) {
+    final List<Integer> treeToList(TreeNode node, List<Integer> result) {
         TreeNode next = node;
-        List<Integer> result = new LinkedList<>();
         while(next.id != -1) {
             result.add(0, next.id);
             next = next.parent;
