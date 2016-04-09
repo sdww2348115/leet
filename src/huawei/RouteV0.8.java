@@ -65,7 +65,8 @@ public final class Route
         startSolution.noContainSize = countSize - 1;
         startSolution.pastPoints = new byte[75];
         route.byteXor(startSolution.pastPoints, start);
-        solutionTreeMap.put((double) startSolution.sum * (startSolution.noContainSize) / countSize, startSolution);
+        double tmp = (double)startSolution.noContainSize / countSize;
+        solutionTreeMap.put((double) startSolution.sum * tmp * tmp, startSolution);
 
         Solution bestSolution = route.new Solution();
         bestSolution.sum = Integer.MAX_VALUE;
@@ -73,9 +74,9 @@ public final class Route
         //随机性
         Random random = new Random(97);
 
-        while( solutionTreeMap.size() > 0 && ((System.currentTimeMillis() - startTime) <= 9 * 1000 )) {
+        while( solutionTreeMap.size() > 0 && ((System.currentTimeMillis() - startTime) <= 9400 )) {
             Double key = solutionTreeMap.firstKey();
-            //加入部分随机性
+            //加入简单随机性
             Integer ran = random.nextInt(100);
             if(ran > 70 && ran < 90) {
                 key += random.nextDouble() * 0.5;
@@ -104,7 +105,8 @@ public final class Route
                             continue;
                         }
                     }
-                    solutionTreeMap.put((double) newSolution.sum * (newSolution.noContainSize) / countSize, newSolution);
+                    tmp = (double)newSolution.noContainSize / countSize;
+                    solutionTreeMap.put((double) newSolution.sum * tmp * tmp, newSolution);
                 }
             }
         }
