@@ -73,21 +73,21 @@ public final class Route
         //随机性
         Random random = new Random(97);
 
-        while( solutionTreeMap.size() > 0 && ((System.currentTimeMillis() - startTime) <= 9 * 60 * 1000 )) {
+        while( solutionTreeMap.size() > 0 && ((System.currentTimeMillis() - startTime) <= 9 * 1000 )) {
             Double key = solutionTreeMap.firstKey();
             //加入部分随机性
             Integer ran = random.nextInt(100);
             if(ran > 70 && ran < 90) {
-                key += random.nextDouble();
+                key += random.nextDouble() * 0.5;
                 Map.Entry<Double, Solution> entry = solutionTreeMap.lowerEntry(key);
                 key = entry.getKey();
             } else if(ran > 90) {
-                key += random.nextDouble() * 5;
+                key += random.nextDouble() * 2;
                 Map.Entry<Double, Solution> entry = solutionTreeMap.lowerEntry(key);
                 key = entry.getKey();
             }
             Solution currentSolution = solutionTreeMap.remove(key);
-            
+
             if(currentSolution.sum >= bestSolution.sum) continue;
             for(int i = 0; i <= maxNodeId; i++) {
                 if( (!route.byteContain(currentSolution.pastPoints, i)) && graph[currentSolution.point][i] != null) {
