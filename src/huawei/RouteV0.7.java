@@ -68,12 +68,13 @@ public final class Route
         startSolution.noContainSize = countSize - 1;
         startSolution.pastPoints = new byte[75];
         route.byteXor(startSolution.pastPoints, start);
-        solutionTreeMap.put((double)startSolution.sum * (startSolution.noContainSize) / countSize, startSolution);
+        double tmp = (double)startSolution.noContainSize / countSize;
+        solutionTreeMap.put((double)startSolution.sum * tmp * tmp , startSolution);
 
         Solution bestSolution = route.new Solution();
         bestSolution.sum = Integer.MAX_VALUE;
 
-        while( solutionTreeMap.size() > 0 && ((System.currentTimeMillis() - startTime) <= 9 * 60 * 1000 )) {
+        while( solutionTreeMap.size() > 0 && ((System.currentTimeMillis() - startTime) <= 9400 )) {
             Double firstKey = solutionTreeMap.firstKey();
             Solution currentSolution = solutionTreeMap.remove(firstKey);
             if(currentSolution.sum >= bestSolution.sum) continue;
@@ -92,7 +93,8 @@ public final class Route
                             continue;
                         }
                     }
-                    solutionTreeMap.put((double)newSolution.sum * (newSolution.noContainSize) / countSize, newSolution);
+                    tmp = (double)newSolution.noContainSize / countSize;
+                    solutionTreeMap.put((double)newSolution.sum * tmp * tmp, newSolution);
                 }
             }
         }
